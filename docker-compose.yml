@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+#    image: vyacheslavshrot/fast_api_mvc:latest
+    build:
+      context: .
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/FlowerAIBot
+
+  db:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
