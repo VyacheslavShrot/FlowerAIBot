@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+# Idea
+.idea
+
+# Alembic Versions
+/alembic/versions/*
+!/alembic/versions/.gitkeep
+
+# MySQL Db Data
+/db_data/
+
 # Distribution / packaging
 .Python
 build/
