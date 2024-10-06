@@ -16,6 +16,8 @@ class User(Base):
 
     messages = relationship("Message", back_populates="user")
 
+    # orders = relationship("Order", back_populates="user")
+
     def __str__(self):
         return f"{self.id} {self.username}"
 
@@ -39,3 +41,34 @@ class Message(Base):
 
     def __repr__(self):
         return f"<Message(id={self.id}, user={self.user}), text={self.text})>"
+
+
+class Flower(Base):
+    __tablename__ = 'flower'
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(Text, nullable=False)
+    price = Column(Integer, nullable=False)
+    count = Column(Integer, nullable=False)
+
+    def __str__(self):
+        return f"{self.id} {self.title}"
+
+    def __repr__(self):
+        return f"<Flower(id={self.id}, title={self.title})>"
+
+
+# class Order(Base):
+#     __tablename__ = 'order'
+#
+#     id = Column(Integer, primary_key=True, index=True)
+#     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+#     flower = Column(Integer, ManeToMany('flower.id'), nullable=False)
+#
+#     user = relationship("User", back_populates="orders")
+#
+#     def __str__(self):
+#         return f"{self.id} {self.user}"
+#
+#     def __repr__(self):
+#         return f"<Order(id={self.id}, user={self.user})>"
