@@ -12,7 +12,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(100), unique=True, index=True)
-    chat_id = Column(String(100), unique=True)
+    chat_id = Column(String(100), unique=True, index=True)
 
     messages = relationship("Message", back_populates="user")
 
@@ -29,10 +29,10 @@ class Message(Base):
     __tablename__ = 'message'
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False, index=True)
     text = Column(Text, nullable=False)
     response = Column(Text, nullable=False)
-    date = Column(TIMESTAMP, server_default=func.now(), nullable=False)
+    date = Column(TIMESTAMP, server_default=func.now(), nullable=False, index=True)
 
     user = relationship("User", back_populates="messages")
 
@@ -47,8 +47,8 @@ class Flower(Base):
     __tablename__ = 'flower'
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(Text, nullable=False)
-    price = Column(Integer, nullable=False)
+    title = Column(Text, nullable=False, index=True)
+    price = Column(Integer, nullable=False, index=True)
     count = Column(Integer, nullable=False)
 
     def __str__(self):
