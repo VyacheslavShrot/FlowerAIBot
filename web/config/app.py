@@ -2,7 +2,9 @@ from fastapi import FastAPI, HTTPException, Request
 from sqlalchemy import text, CursorResult
 from starlette.responses import JSONResponse
 
+from bot.config.settings import on_startup, on_shutdown
 from web.config.database import database, async_session
+from web.core.urls import register_routes
 
 # Create Web APP FastAPI
 app: FastAPI = FastAPI(
@@ -40,15 +42,17 @@ class AppDefaultHandler:
     @staticmethod
     async def startup():
         """
-        Connect To DataBase
+        Connect To DataBase and Bot WebHook
         """
+        await on_startup(app)
         await database.connect()
 
     @staticmethod
     async def shutdown():
         """
-        Disconnect To DataBase
+        Disconnect To DataBase and Bot WebHook
         """
+        await on_shutdown(app)
         await database.disconnect()
 
     @staticmethod
@@ -85,3 +89,6 @@ app.add_event_handler("shutdown", app_default_handler.shutdown)
 
 app.get("/app-status")(app_default_handler.app_status)
 app.get("/db-status")(app_default_handler.db_status)
+
+# Register Another Routes
+register_routes(app)
