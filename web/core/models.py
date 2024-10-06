@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, MetaData, Text, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, MetaData, Text, ForeignKey, TIMESTAMP, Boolean, Float
 from sqlalchemy.sql import func
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -12,7 +12,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(100), unique=True, index=True)
-    chat_id = Column(String(100), unique=True, index=True)
+    chat_id = Column(Integer, unique=True, index=True)
+    admin = Column(Boolean, default=False, index=True)
 
     messages = relationship("Message", back_populates="user")
 
@@ -47,8 +48,8 @@ class Flower(Base):
     __tablename__ = 'flower'
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(Text, nullable=False, index=True)
-    price = Column(Integer, nullable=False, index=True)
+    title = Column(String(100), nullable=False, index=True)
+    price = Column(Float, nullable=False, index=True)
     count = Column(Integer, nullable=False)
 
     def __str__(self):
