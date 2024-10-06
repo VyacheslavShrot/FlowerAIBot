@@ -16,7 +16,7 @@ services:
 
   db:
     image: mysql:8.0
-    restart: always
+    restart: on-failure
     env_file:
       - .env
     ports:
