@@ -17,7 +17,7 @@ class User(Base):
 
     messages = relationship("Message", back_populates="user")
 
-    # orders = relationship("Order", back_populates="user")
+    orders = relationship("Order", back_populates="user")
 
     def __str__(self):
         return f"{self.id} {self.username}"
@@ -59,17 +59,37 @@ class Flower(Base):
         return f"<Flower(id={self.id}, title={self.title})>"
 
 
-# class Order(Base):
-#     __tablename__ = 'order'
-#
-#     id = Column(Integer, primary_key=True, index=True)
-#     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-#     flower = Column(Integer, ManeToMany('flower.id'), nullable=False)
-#
-#     user = relationship("User", back_populates="orders")
-#
-#     def __str__(self):
-#         return f"{self.id} {self.user}"
-#
-#     def __repr__(self):
-#         return f"<Order(id={self.id}, user={self.user})>"
+class FlowerOrderAssociation(Base):
+    __tablename__ = 'flower_order_association'
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, ForeignKey('order.id'), nullable=False)
+    flower_id = Column(Integer, ForeignKey('flower.id'), nullable=False)
+    count = Column(Integer, nullable=False)
+    price = Column(Float, nullable=False)
+
+    flower = relationship("Flower")
+
+    def __str__(self):
+        return f"Order {self.order_id} - Flower {self.flower_id} (Count: {self.count})"
+
+    def __repr__(self):
+        return f"<FlowerOrderAssociation(order_id={self.order_id}, flower_id={self.flower_id}, count={self.count})>"
+
+
+class Order(Base):
+    __tablename__ = 'order'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    delivery_time = Column(String(100), nullable=False)
+
+    flowers = relationship("FlowerOrderAssociation", backref="order", cascade="all, delete-orphan")
+
+    user = relationship("User", back_populates="orders")
+
+    def __str__(self):
+        return f"{self.id} {self.user}"
+
+    def __repr__(self):
+        return f"<Order(id={self.id}, user={self.user})>"
