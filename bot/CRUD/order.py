@@ -68,3 +68,7 @@ class OrderCRUD:
         await session.add(order)
 
         await session.commit()
+
+        return await self.format_response(
+            order=order
+        )
