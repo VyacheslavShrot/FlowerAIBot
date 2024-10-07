@@ -130,7 +130,32 @@ class Handlers(
                             response=response
                         )
                     else:
-                        ...
+                        # Get Dialog
+                        previous_messages: list[dict] | None = await self.get_all_messages(
+                            session=session,
+                            user_id=user.id
+                        )
+
+                        # Create Response
+                        response: str = await self.create_response(
+                            session=session,
+                            message=message.text,
+                            previous_messages=previous_messages if previous_messages else [],
+                            user_id=user.id
+                        )
+
+                        # Answer
+                        await message.answer(
+                            text=response
+                        )
+
+                        # Create Message for Continue Saving Dialog
+                        await self.create_message(
+                            session=session,
+                            user_id=user.id,
+                            text=message.text,
+                            response=response
+                        )
 
                 else:
                     await message.answer(
