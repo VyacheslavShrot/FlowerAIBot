@@ -103,7 +103,7 @@ class Handlers(
                                 text="Enable Admin Status"
                             )
 
-                    if user.admin:
+                    elif user.admin:
                         # Get Dialog
                         previous_messages: list[dict] | None = await self.get_all_messages(
                             session=session,
